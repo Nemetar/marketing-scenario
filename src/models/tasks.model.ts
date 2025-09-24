@@ -1,12 +1,13 @@
 export type Status = 'idle' | 'running' | 'success' | 'failure';
 
-export type TaskType = 'start' | 'sms' | 'email' | 'custom' | 'end' | 'onSucess' | 'onFailure';
+export type TaskType = 'start' | 'sms' | 'email' | 'custom' | 'end' | 'onSuccess' | 'onFailure';
 
 export interface BaseTask {
   id: string;
   type: TaskType;
   name: string;
   subTasks: Task[];
+  icon?: string;
 }
 
 export interface StartTask extends BaseTask {

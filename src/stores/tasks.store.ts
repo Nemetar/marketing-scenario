@@ -1,6 +1,6 @@
 import { reactive } from 'vue';
 import { defineStore } from 'pinia';
-import { useTasks } from '@/composables/useTasks';
+import { useTasks } from '@/composables/tasks.composable';
 
 export const useTasksStore = defineStore('tasks', () => {
   const tasks = useTasks();

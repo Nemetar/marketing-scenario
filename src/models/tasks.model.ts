@@ -34,7 +34,7 @@ export interface SmsTask extends BaseTask {
 export interface CustomTask extends BaseTask {
   type: 'custom';
   diffusionListId: string;
-  config: Record<string, unknown>;
+  tasks: Task[];
 }
 
 export type Task = StartTask | EndTask | EmailTask | SmsTask | CustomTask | BaseTask;

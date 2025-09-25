@@ -1,18 +1,22 @@
 <script lang="ts" setup>
+import type { EmailTask } from '@/models/tasks.model';
+import BaseForm from './BaseForm.vue';
 
+const task = defineModel<EmailTask>('task', { required: true });
 </script>
 
 <template>
-  <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-    <legend className="fieldset-legend">SMS Task</legend>
+  <BaseForm v-model:task="task">
+    <legend class="fieldset-legend">Sujet</legend>
+    <input type="text" class="input w-full" placeholder="Sujet de l'email" v-model="task.subject" />
 
-    <label className="label">Title</label>
-    <input type="text" className="input" placeholder="My awesome SMS task" />
+    <legend class="fieldset-legend">Contenu</legend>
+    <textarea class="textarea h-24 w-full" placeholder="Contenu de l'email" v-model="task.body"></textarea>
 
-    <label className="label">Slug</label>
-    <input type="text" className="input" placeholder="My awesome SMS task" />
-
-    <label className="label">Author</label>
-    <input type="text" className="input" placeholder="Name" />
-  </fieldset>
+    <legend class="fieldset-legend">Liste de diffusion</legend>
+    <select v-model="task.diffusionListId" class="select w-full">
+      <option>Liste client principaux</option>
+      <option>Liste client secondaires</option>
+    </select>
+  </BaseForm>
 </template>

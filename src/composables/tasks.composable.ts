@@ -1,9 +1,20 @@
 import type { Task, TaskType } from '@/models/tasks.model';
 import { generateId } from '@/utils/id';
 
+import EmailForm from '@/components/forms/EmailForm.vue';
+import BaseForm from '@/components/forms/BaseForm.vue';
+import SmsForm from '@/components/forms/SmsForm.vue';
+import CustomForm from '@/components/forms/CustomForm.vue';
+
 export const useTasks = () => {
   const createTask = (type: TaskType): Task => {
-    return { id: generateId(), type, name: type, subTasks: [] as Task[], icon: getTaskIcon(type) };
+    return {
+      id: generateId(),
+      type,
+      name: type,
+      subTasks: [] as Task[],
+      tasks: [],
+    };
   };
 
   const createSubtask = ({ task, type }: { task: Task; type: TaskType }) => {
@@ -63,7 +74,7 @@ export const useTasks = () => {
     return icons[type] ?? '❓';
   };
 
-  const getTaskAuthorizedSubtasks = (task: Task): string[] => {
+  const getTaskAuthorizedSubtasks = (task: Task) => {
     if (hasEndSubtask(task)) return [];
 
     const commonTasks = ['sms', 'email', 'custom', 'end', 'onSuccess', 'onFailure'] as TaskType[];
@@ -80,6 +91,20 @@ export const useTasks = () => {
     return tasks[task.type] ?? [];
   };
 
+  const getTaskFormComponent = (type: TaskType) => {
+    const components: Record<TaskType, unknown> = {
+      start: BaseForm,
+      sms: SmsForm,
+      email: EmailForm,
+      custom: CustomForm,
+      end: BaseForm,
+      onSuccess: BaseForm,
+      onFailure: BaseForm,
+    };
+
+    return components[type] ?? null;
+  };
+
   return {
     createTask,
     createSubtask,
@@ -94,5 +119,6 @@ export const useTasks = () => {
 
     getTaskIcon,
     getTaskAuthorizedSubtasks,
+    getTaskFormComponent,
   };
 };

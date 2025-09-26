@@ -7,7 +7,6 @@ export interface BaseTask {
   type: TaskType;
   name: string;
   subTasks: Task[];
-  icon?: string;
 }
 
 export interface StartTask extends BaseTask {
@@ -18,6 +17,12 @@ export interface EndTask extends BaseTask {
   type: 'end';
 }
 
+export interface SuccessTask extends BaseTask {
+  type: 'onSuccess';
+}
+export interface FailureTask extends BaseTask {
+  type: 'onFailure';
+}
 export interface EmailTask extends BaseTask {
   type: 'email';
   diffusionListId: string;
@@ -34,7 +39,15 @@ export interface SmsTask extends BaseTask {
 export interface CustomTask extends BaseTask {
   type: 'custom';
   diffusionListId: string;
-  tasks: Task[];
+  customTasks: Task[];
 }
 
-export type Task = StartTask | EndTask | EmailTask | SmsTask | CustomTask | BaseTask;
+export type Task =
+  | StartTask
+  | EndTask
+  | EmailTask
+  | SmsTask
+  | CustomTask
+  | SuccessTask
+  | FailureTask
+  | BaseTask;

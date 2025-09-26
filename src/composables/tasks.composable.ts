@@ -1,5 +1,4 @@
 import type { Task, TaskType } from '@/models/tasks.model';
-import { generateId } from '@/utils/id';
 
 import EmailForm from '@/components/forms/EmailForm.vue';
 import BaseForm from '@/components/forms/BaseForm.vue';
@@ -7,19 +6,60 @@ import SmsForm from '@/components/forms/SmsForm.vue';
 import CustomForm from '@/components/forms/CustomForm.vue';
 
 export const useTasks = () => {
+  const createBaseTask = (type: TaskType) => ({
+    id: crypto.randomUUID(),
+    type,
+    name: type,
+    subTasks: [] as Task[],
+  });
+
+  const createEmailTask = () => ({
+    ...createBaseTask('email'),
+    diffusionListId: '',
+    subject: '',
+    body: '',
+  });
+
+  const createSmsTask = () => ({
+    ...createBaseTask('sms'),
+    diffusionListId: '',
+    message: '',
+  });
+
+  const createCustomTask = () => ({
+    ...createBaseTask('custom'),
+    diffusionListId: '',
+    tasks: [] as Task[],
+  });
+
   const createTask = (type: TaskType): Task => {
-    return {
-      id: generateId(),
-      type,
-      name: type,
-      subTasks: [] as Task[],
-      tasks: [],
-    };
+    switch (type) {
+      case 'start':
+        return createBaseTask('start');
+      case 'end':
+        return createBaseTask('end');
+      case 'onSuccess':
+        return createBaseTask('onSuccess');
+      case 'onFailure':
+        return createBaseTask('onFailure');
+      case 'email':
+        return createEmailTask();
+      case 'sms':
+        return createSmsTask();
+      case 'custom':
+        return createCustomTask();
+      default:
+        return createBaseTask('end');
+    }
   };
 
   const createSubtask = ({ task, type }: { task: Task; type: TaskType }) => {
     const newTask = createTask(type);
-    task.subTasks.push(newTask);
+    if (type === 'end') {
+      task.subTasks = [newTask];
+    } else {
+      task.subTasks.push(newTask);
+    }
   };
 
   const deleteSubtask = ({ parent, task }: { parent: Task; task: Task }) => {
@@ -45,26 +85,10 @@ export const useTasks = () => {
     return task.type === 'end';
   };
 
-  const showDeleteAction = (task: Task) => {
-    return !isStartTask(task) || isEndTask(task) || hasEndSubtask(task);
-  };
-
-  const updateTaskField = (task: Task, field: keyof Task, value: unknown) => {
-    if (field === 'type' && typeof value === 'string') {
-      task.type = value as TaskType;
-    } else if (field === 'name' && typeof value === 'string') {
-      task.name = value;
-    } else if (field === 'subTasks' && Array.isArray(value)) {
-      task.subTasks = value as Task[];
-    } else if (field === 'id' && typeof value === 'string') {
-      task.id = value;
-    }
-  };
-
   const getTaskIcon = (type: TaskType): string => {
     const icons: Record<TaskType, string> = {
       start: '🚀',
-      sms: '📱',
+      sms: '💬',
       email: '📧',
       custom: '🔧',
       end: '🏁',
@@ -109,13 +133,11 @@ export const useTasks = () => {
     createTask,
     createSubtask,
     deleteSubtask,
-    updateTaskField,
 
     isStartTask,
     isEndTask,
     hasSubtasks,
     hasEndSubtask,
-    showDeleteAction,
 
     getTaskIcon,
     getTaskAuthorizedSubtasks,

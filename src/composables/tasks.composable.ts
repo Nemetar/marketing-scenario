@@ -29,7 +29,7 @@ export const useTasks = () => {
   const createCustomTask = () => ({
     ...createBaseTask('custom'),
     diffusionListId: '',
-    tasks: [] as Task[],
+    customTasks: [] as Task[],
   });
 
   const createTask = (type: TaskType): Task => {
@@ -98,6 +98,15 @@ export const useTasks = () => {
     return icons[type] ?? '❓';
   };
 
+  const getTaskStatusIcon = (status: string) => {
+    const icons: Record<string, { icon?: string; class?: string } | null> = {
+      running: { class: 'loading loading-spinner text-primary loading-xs' },
+      success: { icon: '✅' },
+      failure: { icon: '❌' },
+    };
+    return icons[status] ?? null;
+  };
+
   const getTaskAuthorizedSubtasks = (task: Task) => {
     if (hasEndSubtask(task)) return [];
 
@@ -140,6 +149,7 @@ export const useTasks = () => {
     hasEndSubtask,
 
     getTaskIcon,
+    getTaskStatusIcon,
     getTaskAuthorizedSubtasks,
     getTaskFormComponent,
   };

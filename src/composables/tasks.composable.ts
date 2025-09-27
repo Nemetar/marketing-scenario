@@ -90,7 +90,7 @@ export const useTasks = () => {
       start: '🚀',
       sms: '💬',
       email: '📧',
-      custom: '🔧',
+      custom: '⚙️',
       end: '🏁',
       onSuccess: '✅',
       onFailure: '❌',
@@ -110,7 +110,7 @@ export const useTasks = () => {
   const getTaskAuthorizedSubtasks = (task: Task) => {
     if (hasEndSubtask(task)) return [];
 
-    const commonTasks = ['sms', 'email', 'custom', 'end', 'onSuccess', 'onFailure'] as TaskType[];
+    const commonTasks = ['sms', 'email', 'custom', 'onSuccess', 'onFailure', 'end'] as TaskType[];
     const tasks: Record<TaskType, TaskType[]> = {
       start: ['sms', 'email', 'custom'],
       end: [],
@@ -138,6 +138,17 @@ export const useTasks = () => {
     return components[type] ?? null;
   };
 
+  const exportTasksFlow = (tasksFlow: Task) => {
+    const json = JSON.stringify(tasksFlow, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'flow.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return {
     createTask,
     createSubtask,
@@ -152,5 +163,7 @@ export const useTasks = () => {
     getTaskStatusIcon,
     getTaskAuthorizedSubtasks,
     getTaskFormComponent,
+
+    exportTasksFlow,
   };
 };

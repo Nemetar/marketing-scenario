@@ -13,7 +13,9 @@
         <legend class="fieldset-legend">Configuration</legend>
         <p>Une tâche personnalisée permet de regrouper plusieurs tâches (email, sms...)</p>
       </div>
+
       <BaseForm v-model:task=task />
+
       <div v-for="(customTask, index) in task.customTasks" :key="customTask.id" class="flex flex-col gap-1">
         <component v-if="getTaskFormComponent(customTask.type)" :is="getTaskFormComponent(customTask.type)"
           v-model:task="task.customTasks[index]" />
@@ -22,6 +24,7 @@
           supprimer
         </span>
       </div>
+
       <div class="flex gap-2">
         <button class="btn btn-soft btn-primary btn-sm flex-1" @click="task.customTasks.push(createTask('email'))">
           Ajouter Email

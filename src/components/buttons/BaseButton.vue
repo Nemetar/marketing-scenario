@@ -6,7 +6,7 @@ defineProps<{
 </script>
 
 <template>
-  <button class="tooltip btn btn-soft" :class="`btn-${color}`" :data-tip="tooltip">
+  <label class="tooltip btn btn-soft" :class="`btn-${color}`" :data-tip="tooltip">
     <slot></slot>
-  </button>
+  </label>
 </template>

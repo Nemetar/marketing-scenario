@@ -23,7 +23,9 @@ const { status } = useLogsStore();
         {{ getTaskStatusIcon(status[task.id])?.icon }}
       </span>
 
-      <BaseButton v-if="isStartTask(task)" @click="runTaskFlowSimulation" tooltip="lancer" color="success">▶️
+      <BaseButton v-if="isStartTask(task)" @click="runTaskFlowSimulation" tooltip="lancer" color="success"
+        for="logs-drawer">
+        ▶️
       </BaseButton>
 
       <component v-if="getTaskFormComponent(task.type)" :is="getTaskFormComponent(task.type)" v-model:task="task" />

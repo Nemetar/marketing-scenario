@@ -11,7 +11,7 @@ import type {
 export const useSimulation = () => {
   const simulateStart = async (task: StartTask, logs: LogsStore) => {
     logs.setStatus(task.id, 'running');
-    logs.addLog(`🚀 Start: ${task.name}`);
+    logs.addLog(`🚀 ${task.name}`);
 
     await new Promise((resolve) => setTimeout(resolve, 800));
 
@@ -21,27 +21,25 @@ export const useSimulation = () => {
 
   const simulateSms = async (task: SmsTask, logs: LogsStore) => {
     logs.setStatus(task.id, 'running');
-    logs.addLog(`💬 SMS: ${task.name}`);
 
     await new Promise((resolve) => setTimeout(resolve, 800));
 
     logs.setStatus(task.id, 'success');
-    logs.addLog(`✅ SMS ${task.name}`);
+    logs.addLog(`✅ ${task.name}`);
 
     return true;
   };
 
   const simulateEmail = async (task: EmailTask, logs: LogsStore) => {
     logs.setStatus(task.id, 'running');
-    logs.addLog(`📧 Email: ${task.name}`);
 
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    const ok = Math.random() < 0.5;
-    logs.setStatus(task.id, ok ? 'success' : 'failure');
-    logs.addLog(`${ok ? '✅' : '❌'} Email ${task.name}`);
+    const success = Math.random() > 0.5;
+    logs.addLog(`${success ? '✅' : '❌'} ${task.name}`);
+    logs.setStatus(task.id, success ? 'success' : 'failure');
 
-    return ok;
+    return success;
   };
 
   const simulateCustom = async (task: CustomTask, logs: LogsStore) => {
@@ -51,8 +49,6 @@ export const useSimulation = () => {
     await Promise.all(task.customTasks.map((customTask) => simulateTask(customTask, logs)));
 
     logs.setStatus(task.id, 'success');
-    logs.addLog(`✅ Custom ${task.name}`);
-
     return true;
   };
 
